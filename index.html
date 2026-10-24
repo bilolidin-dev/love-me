@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,21 +9,52 @@
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
       rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
-    <title>Do you love me?</title>
+    <title>Ты меня любишь?</title>
 </head>
 <body>
 
+<div class="language-switch" role="group" aria-label="Выбор языка">
+  <button class="language-button is-active" type="button" data-language="ru" aria-pressed="true">RU</button>
+  <button class="language-button" type="button" data-language="ky" aria-pressed="false">KG</button>
+  <button class="language-button" type="button" data-language="en" aria-pressed="false">EN</button>
+</div>
+
+<main class="creator-container container">
+  <div class="creator-intro">
+    <p class="creator-kicker">LOVE NOTE <span>NO. 01</span></p>
+    <h1 class="creator-title">Создай валентинку</h1>
+    <p class="creator-copy">Один вопрос. Одно имя. И немного смелости.</p>
+    <span class="creator-heart" aria-hidden="true">&#9829;</span>
+  </div>
+  <section class="creator-panel" aria-label="Создание валентинки">
+    <form class="creator-form">
+      <label class="name-label" for="recipient-name">Имя любимого человека</label>
+      <input class="name-input" id="recipient-name" name="recipient" maxlength="40" autocomplete="off" required />
+      <button class="create-link-button" type="submit"><span>Создать ссылку</span><span aria-hidden="true">&#8594;</span></button>
+    </form>
+    <div class="share-link" hidden>
+      <label class="link-label" for="share-url">Отправь эту ссылку:</label>
+      <div class="share-link-row">
+        <input class="share-url" id="share-url" type="url" readonly />
+        <button class="copy-link-button" type="button" aria-label="Копировать ссылку">Копировать</button>
+      </div>
+      <p class="copy-status" role="status" aria-live="polite"></p>
+    </div>
+    <p class="panel-footnote"><span aria-hidden="true">&#10003;</span> Только для одного особенного человека</p>
+  </section>
+</main>
+
 <div class="question-container container">
 <video class="local-gif" src="Reply me love.mp4" autoplay muted loop></video>
-  <h2 class="question">Do you love me?</h2>
+  <h2 class="question">Ты меня любишь?</h2>
   <div class="button-container">
-    <button class="yes-btn btn js-yes-btn">Yes</button>
-    <button class="no-btn btn js-no-btn">No</button>
+    <button class="yes-btn btn js-yes-btn">Да</button>
+    <button class="no-btn btn js-no-btn">Нет</button>
   </div>
 </div>
 <div class="result-container container">
   <video class="gif-result" src="Love me.mp4" autoplay loop></video>
-  <h2>I knew it😍!</h2>
+  <h2>Я так и знала!😍</h2>
 </div>
 
 <div class="cssload-main">
