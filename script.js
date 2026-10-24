@@ -15,7 +15,20 @@ const shareUrlInput = document.querySelector(".share-url");
 const copyLinkButton = document.querySelector(".copy-link-button");
 const copyStatus = document.querySelector(".copy-status");
 const query = new URLSearchParams(window.location.search);
-const recipientName = query.get("to")?.trim().slice(0, 40) || "";
+const languageCodes = { ru: "r", ky: "k", en: "e" };
+const compactLink = window.location.hash.slice(1);
+const compactLanguage = Object.entries(languageCodes).find(([, code]) => compactLink.startsWith(code))?.[0];
+let recipientName = "";
+
+if (compactLanguage) {
+  try {
+    recipientName = decodeURIComponent(compactLink.slice(1)).trim().slice(0, 40);
+  } catch {
+    recipientName = "";
+  }
+}
+
+recipientName ||= query.get("to")?.trim().slice(0, 40) || "";
 let currentLanguage;
 
 const translations = {
@@ -112,7 +125,7 @@ languageButtons.forEach((button) => {
 
 const requestedLanguage = query.get("lang");
 const savedLanguage = localStorage.getItem("love-page-language");
-setLanguage(translations[requestedLanguage] ? requestedLanguage : (savedLanguage || "ru"));
+setLanguage(compactLanguage || (translations[requestedLanguage] ? requestedLanguage : (savedLanguage || "ru")));
 
 if (recipientName) {
   creatorContainer.hidden = true;
@@ -134,8 +147,7 @@ creatorForm.addEventListener("submit", (event) => {
   recipientNameInput.setCustomValidity("");
   const shareUrl = new URL(window.location.href);
   shareUrl.search = "";
-  shareUrl.searchParams.set("to", name);
-  shareUrl.searchParams.set("lang", currentLanguage);
+  shareUrl.hash = `${languageCodes[currentLanguage]}${encodeURIComponent(name)}`;
   shareUrlInput.value = shareUrl.toString();
   shareLinkContainer.hidden = false;
   copyStatus.textContent = "";
