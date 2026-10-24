@@ -22,7 +22,15 @@ let recipientName = "";
 
 if (compactLanguage) {
   try {
-    recipientName = decodeURIComponent(compactLink.slice(1)).trim().slice(0, 40);
+    const encodedName = compactLink.slice(1);
+    if (encodedName.startsWith("~")) {
+      const base64 = encodedName.slice(1).replace(/-/g, "+").replace(/_/g, "/");
+      const binary = atob(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
+      const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+      recipientName = new TextDecoder().decode(bytes).trim().slice(0, 40);
+    } else {
+      recipientName = decodeURIComponent(encodedName).trim().slice(0, 40);
+    }
   } catch {
     recipientName = "";
   }
@@ -145,9 +153,17 @@ creatorForm.addEventListener("submit", (event) => {
   }
 
   recipientNameInput.setCustomValidity("");
+  const readableName = encodeURIComponent(name);
+  const base64Name = btoa(String.fromCharCode(...new TextEncoder().encode(name)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+  const compactName = base64Name.length + 1 < readableName.length
+    ? `~${base64Name}`
+    : readableName;
   const shareUrl = new URL(window.location.href);
   shareUrl.search = "";
-  shareUrl.hash = `${languageCodes[currentLanguage]}${encodeURIComponent(name)}`;
+  shareUrl.hash = `${languageCodes[currentLanguage]}${compactName}`;
   shareUrlInput.value = shareUrl.toString();
   shareLinkContainer.hidden = false;
   copyStatus.textContent = "";
